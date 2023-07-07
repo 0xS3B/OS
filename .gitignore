@@ -1,0 +1,6 @@
+bin
+obj
+
+*.o
+
+bootloader/limine
