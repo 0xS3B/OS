@@ -1,3 +1,7 @@
+#include <types.h>
+
+#include <arch/arch.h>
+
 #include "../../bootloader/limine/limine.h"
 
 static volatile struct limine_terminal_request terminal_request = {
@@ -8,7 +12,9 @@ static volatile struct limine_terminal_request terminal_request = {
 void kernel_start() {
     struct limine_terminal_response *reponse = terminal_request.response;
     
-    reponse->write(reponse->terminals[0], "Hello World!", 12);
+    //reponse->write(reponse->terminals[0], "Hello World!", 12);
+
+    // todo: init_gdt
 
     while(1) asm("hlt");
 }

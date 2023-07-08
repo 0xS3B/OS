@@ -1,5 +1,6 @@
 QEMUFLAGS := 	-m 512M \
-				-enable-kvm
+				-enable-kvm \
+				-cdrom ./bin/os.iso
 
 all: build-bootloader build-kernel
 	mkdir -m 777 -p bin
@@ -18,14 +19,16 @@ all: build-bootloader build-kernel
 build-bootloader:
 	make -C bootloader/limine
 
+# J'utilise limine 4 car il y a pas la terminal feature sur limine 5 
+install-limine:
+	cd bootloader && \
+	git clone https://github.com/limine-bootloader/limine.git --branch=v4.x-branch-binary --depth=1
+
 build-kernel:
 	make -C kernel
 
 run:
-	qemu-system-x86_64 $(QEMUFLAGS) bin/os.iso
+	qemu-system-x86_64 $(QEMUFLAGS)
 
-
-# J'utilise limine 4 car il y a pas la terminal feature sur limine 5 
-build-limine:
-	cd sources/bootloader && \
-	git clone https://github.com/limine-bootloader/limine.git --branch=v4.x-branch-binary --depth=1
+debug:
+	qemu-system-x86_64 $(QEMUFLAGS) -s -S
