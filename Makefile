@@ -1,7 +1,8 @@
 OSSOURCES = OS
 
 QEMUFLAGS := 	-no-reboot \
-				-m 512M \
+				-m 2G \
+				-serial stdio \
 				-cdrom ./bin/os.iso
 
 all: build-bootloader build-kernel

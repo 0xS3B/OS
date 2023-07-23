@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define NULL    0x0
+#define NULL    0
 
 typedef __builtin_va_list	va_list;
 #define va_start(v,l)		__builtin_va_start(v,l)

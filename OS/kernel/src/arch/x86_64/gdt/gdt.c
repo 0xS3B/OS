@@ -1,43 +1,48 @@
 #include "gdt.h"
 
-static gdtEntry_t gdtEntries[GDT_MAX_DESCRIPTORS];
-uint8_t gdtIndexTable = 0;
+#include <log/log.h>
+#define MODULE_NAME "GDT"
 
-static void createDescriptor(uint32_t base, uint32_t limit, uint8_t access, uint8_t flags) {
-    // ! todo: error message
-    if(gdtIndexTable >= GDT_MAX_DESCRIPTORS) return;
-    if(limit > 0xFFFFF) return;
+static gdt_t gdt;
+
+static gdtEntry_t createDescriptor(uint32_t base, uint32_t limit, uint8_t access, uint8_t flags) {
+    gdtEntry_t descriptor;
     
-    gdtEntries[gdtIndexTable].limitLow = GDT_LIMIT_LOW(limit);
-    gdtEntries[gdtIndexTable].baseLow = GDT_BASE_LOW(base);
-    gdtEntries[gdtIndexTable].baseMiddle = GDT_BASE_MIDDLE(base);
-    gdtEntries[gdtIndexTable].access = access;
-    gdtEntries[gdtIndexTable].limitHigh = GDT_LIMIT_HIGH(limit);
-    gdtEntries[gdtIndexTable].flags = flags;
-    gdtEntries[gdtIndexTable].baseHigh = GDT_BASE_HIGH(base);
+    descriptor.limitLow = GDT_LIMIT_LOW(limit);
+    descriptor.baseLow = GDT_BASE_LOW(base);
+    descriptor.baseMiddle = GDT_BASE_MIDDLE(base);
+    descriptor.access = access;
+    descriptor.limitHigh = GDT_LIMIT_HIGH(limit);
+    descriptor.flags = flags;
+    descriptor.baseHigh = GDT_BASE_HIGH(base);
 
-    gdtIndexTable++;
+    return descriptor;
 }
 
 void initGDT() {
-    gdtRegister_t gdtReg;
-    gdtReg.size = sizeof(gdtEntry_t) * GDT_MAX_DESCRIPTORS - 1;
-    gdtReg.addr = (uint64_t) &gdtEntries;
-
-    // null descriptor
-    createDescriptor(0, 0, 0, 0);
+    // INSTALL GDT
+    // kernel null descriptor
+    gdt.gdtEntries[0] = createDescriptor(0, 0, 0, 0);
 
     // kernel mode code descriptor
-    createDescriptor(0, 0xFFFFF, 
-        GDT_ACCESS_IS_PRESENT | GDT_ACCESS_CODE_SEGMENT | GDT_ACCESS_CODE_IS_READABLE | GDT_ACCESS_CODE_IS_EXECUTABLE | GDT_ACCESS_RING0,
+    gdt.gdtEntries[1] = createDescriptor(0, 0xFFFFF, 
+        GDT_ACCESS_IS_PRESENT | GDT_ACCESS_CODEDATA_SEGMENT | GDT_ACCESS_READ_WRITE | GDT_ACCESS_IS_EXECUTABLE | GDT_ACCESS_RING0,
         GDT_FLAGS_IS_64BITS | GDT_FLAGS_GRANULARITY_4KIB
     );
 
     // kernel mode data descriptor
-    createDescriptor(0, 0xFFFFF, 
-        GDT_ACCESS_IS_PRESENT | GDT_ACCESS_DATA_SEGMENT | GDT_ACCESS_DATA_IS_WRITABLE | GDT_ACCESS_RING0,
+    gdt.gdtEntries[2] = createDescriptor(0, 0xFFFFF, 
+        GDT_ACCESS_IS_PRESENT | GDT_ACCESS_CODEDATA_SEGMENT | GDT_ACCESS_READ_WRITE | GDT_ACCESS_RING0,
         GDT_FLAGS_IS_64BITS | GDT_FLAGS_GRANULARITY_4KIB
     );
-
+    
+    gdtRegister_t gdtReg = { 
+        .size = sizeof(gdtEntry_t) * GDT_MAX_DESCRIPTORS - 1,
+        .addr = (uint64_t) &gdt.gdtEntries,
+    };
     loadGDT(&gdtReg);
+
+    // TODO: INSTALL TSS
+
+    log(SUCCESS, MODULE_NAME, "Initialized");
 }

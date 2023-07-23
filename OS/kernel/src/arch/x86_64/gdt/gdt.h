@@ -26,23 +26,16 @@ typedef struct gdtEntry_s {
 #define GDT_BASE_MIDDLE(base)   ((base >> 16) & 0xFF)
 #define GDT_BASE_HIGH(base)     ((base >> 24) & 0xFF)
 
+typedef struct gdt_s {
+    gdtEntry_t gdtEntries[GDT_MAX_DESCRIPTORS];
+    // tss
+} gdt_t;
 
 typedef enum {
-    GDT_ACCESS_IS_ACCESSED          = (1 << 0),
-    GDT_ACCESS_IS_PRESENT           = (1 << 7),
-
-    GDT_ACCESS_CODE_IS_READABLE     = (1 << 1),
-    GDT_ACCESS_DATA_IS_WRITABLE     = (1 << 1),
-
-    GDT_ACCESS_CODE_CONFORMING      = (1 << 2),
-    GDT_ACCESS_DATA_DIRECTION_UP    = NULL,
-    GDT_ACCESS_DATA_DIRECTION_DOWN  = (1 << 2),
-    
-    GDT_ACCESS_CODE_IS_EXECUTABLE   = (1 << 3),
-
-    GDT_ACCESS_DATA_SEGMENT         = (1 << 4),
-    GDT_ACCESS_CODE_SEGMENT         = (1 << 4),
-    GDT_ACCESS_SYSTEM_SEGMENT       = NULL,
+    GDT_ACCESS_IS_PRESENT              = (1 << 7),
+    GDT_ACCESS_READ_WRITE              = (1 << 1),
+    GDT_ACCESS_IS_EXECUTABLE           = (1 << 3),
+    GDT_ACCESS_CODEDATA_SEGMENT        = (1 << 4),
     
     // privilege
     GDT_ACCESS_RING0        = NULL,
@@ -54,13 +47,13 @@ typedef enum {
 
 typedef enum {
     // long mode
-    GDT_FLAGS_IS_64BITS         = (1 << 1),
+    GDT_FLAGS_IS_64BITS           = (1 << 1),
     // protected mode
-    GDT_FLAGS_IS_32BITS         = (1 << 2),
-    GDT_FLAGS_IS_16BITS         = NULL,
+    GDT_FLAGS_IS_32BITS           = (1 << 2),
+    GDT_FLAGS_IS_16BITS           = NULL,
     
-    GDT_FLAGS_GRANULARITY_1B    = NULL,
-    GDT_FLAGS_GRANULARITY_4KIB  = (1 << 3),
+    GDT_FLAGS_GRANULARITY_1B      = NULL,
+    GDT_FLAGS_GRANULARITY_4KIB    = (1 << 3),
 } GDT_FLAGS;
 
 
