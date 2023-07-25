@@ -10,5 +10,8 @@ $(OBJDIR)/%_asm.o: $(SRCDIR)/%.asm
 	@ mkdir -m 777 -p $(@D)
 	$(AS) $(ASMFLAGS) $^ -o $@
 
-link: $(OBJS)	
+link: $(OBJS)
 	$(LD) $(LDFLAGS) -Tkernel.ld $^ -o $(BINDIR)/kernel.elf
+
+clean:
+	rm -f -R $(OBJDIR)

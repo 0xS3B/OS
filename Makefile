@@ -5,8 +5,9 @@ QEMUFLAGS := 	-no-reboot \
 				-serial stdio \
 				-cdrom ./bin/os.iso
 
+.PHONY: clean run debug
+
 all: build-bootloader build-kernel
-	mkdir -m 777 -p bin
 	cd $(OSSOURCES)/bootloader && \
 	cp -v limine.cfg limine/limine.sys limine/limine-cd.bin limine/limine-cd-efi.bin ../../bin
 
@@ -20,6 +21,7 @@ all: build-bootloader build-kernel
 	./$(OSSOURCES)/bootloader/limine/limine-deploy bin/os.iso
 
 build-bootloader:
+	mkdir -m 777 -p bin
 	make -C $(OSSOURCES)/bootloader/limine
 
 install-limine:
@@ -27,6 +29,7 @@ install-limine:
 	git clone https://github.com/limine-bootloader/limine.git --branch=v4.x-branch-binary --depth=1
 
 build-kernel:
+	mkdir -m 777 -p bin
 	make -C $(OSSOURCES)/kernel
 
 run:
@@ -34,3 +37,8 @@ run:
 
 debug:
 	qemu-system-x86_64 $(QEMUFLAGS) -s -S
+
+
+clean:
+	@ make clean -s -C $(OSSOURCES)/kernel
+	@ rm -f -R bin

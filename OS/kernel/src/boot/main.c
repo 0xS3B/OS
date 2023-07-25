@@ -15,12 +15,6 @@ void kernel_start() {
     initSerial();
 
     initArch();
-    
-
-    log(SUCCESS, NULL, "hello world!");
-    log(INFO, NULL, "hello world!");
-    log(WARN, NULL, "hello world!");
-    log(ERROR, NULL, "hello world!");
 
     while(1) asm("hlt");
 }

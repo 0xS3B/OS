@@ -2,7 +2,7 @@
 
 #include <types.h>
 
-#define GDT_MAX_DESCRIPTORS     3
+#define GDT_MAX_DESCRIPTORS     5
 
 typedef struct gdtRegister_s {
     uint16_t size;
@@ -19,23 +19,49 @@ typedef struct gdtEntry_s {
     uint8_t baseHigh;
 } __attribute__((packed)) gdtEntry_t;
 
+// TSS
+typedef struct tssEntry_s {
+    uint16_t limitLow;
+    uint16_t baseLow;
+    uint8_t baseMiddle;
+    uint8_t access;
+    uint8_t limitHigh:4;
+    unsigned flags:4;
+    uint8_t baseHigh;
+    uint32_t baseUpper;
+    uint32_t reserved;
+} __attribute__((packed)) tssEntry_t;
+
+typedef struct tss_s {
+    uint32_t reserved0;
+    uint64_t rsp[3];
+    uint64_t reserved1;
+    uint64_t ist[7];
+    uint64_t reserved2;
+    uint16_t reserved3;
+    uint16_t iopbOffset; // the 16-bit offset to the I/O permission bit map
+} __attribute__((packed)) tss_t;
+
 #define GDT_LIMIT_LOW(limit)    (limit & 0xFFFF)
 #define GDT_LIMIT_HIGH(limit)   ((limit >> 16) & 0xF)
 
 #define GDT_BASE_LOW(base)      (base & 0xFFFF)
 #define GDT_BASE_MIDDLE(base)   ((base >> 16) & 0xFF)
 #define GDT_BASE_HIGH(base)     ((base >> 24) & 0xFF)
+#define GDT_BASE_UPPER(base)    (base >> 32)
+
 
 typedef struct gdt_s {
     gdtEntry_t gdtEntries[GDT_MAX_DESCRIPTORS];
-    // tss
+    tssEntry_t tssEntry;
 } gdt_t;
 
 typedef enum {
-    GDT_ACCESS_IS_PRESENT              = (1 << 7),
-    GDT_ACCESS_READ_WRITE              = (1 << 1),
-    GDT_ACCESS_IS_EXECUTABLE           = (1 << 3),
-    GDT_ACCESS_CODEDATA_SEGMENT        = (1 << 4),
+    GDT_ACCESS_IS_ACCESSED              = (1 << 0),
+    GDT_ACCESS_IS_PRESENT               = (1 << 7),
+    GDT_ACCESS_READ_WRITE               = (1 << 1), // code: read only    data: read/write
+    GDT_ACCESS_IS_EXECUTABLE            = (1 << 3),
+    GDT_ACCESS_CODEDATA_SEGMENT         = (1 << 4),
     
     // privilege
     GDT_ACCESS_RING0        = NULL,
@@ -58,5 +84,6 @@ typedef enum {
 
 
 extern void loadGDT(gdtRegister_t* gdtReg);
+extern void loadTSS();
 
 void initGDT();
