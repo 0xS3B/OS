@@ -2,7 +2,7 @@
 
 #include <types.h>
 
-#define GDT_MAX_DESCRIPTORS     5
+#define GDT_MAX_DESCRIPTORS     6
 
 typedef struct gdtRegister_s {
     uint16_t size;
@@ -19,7 +19,6 @@ typedef struct gdtEntry_s {
     uint8_t baseHigh;
 } __attribute__((packed)) gdtEntry_t;
 
-// TSS
 typedef struct tssEntry_s {
     uint16_t limitLow;
     uint16_t baseLow;
@@ -34,9 +33,9 @@ typedef struct tssEntry_s {
 
 typedef struct tss_s {
     uint32_t reserved0;
-    uint64_t rsp[3];
+    uint64_t rsp[3]; // stack pointer
     uint64_t reserved1;
-    uint64_t ist[7];
+    uint64_t ist[7]; // interrupt stack table
     uint64_t reserved2;
     uint16_t reserved3;
     uint16_t iopbOffset; // the 16-bit offset to the I/O permission bit map
@@ -50,11 +49,6 @@ typedef struct tss_s {
 #define GDT_BASE_HIGH(base)     ((base >> 24) & 0xFF)
 #define GDT_BASE_UPPER(base)    (base >> 32)
 
-
-typedef struct gdt_s {
-    gdtEntry_t gdtEntries[GDT_MAX_DESCRIPTORS];
-    tssEntry_t tssEntry;
-} gdt_t;
 
 typedef enum {
     GDT_ACCESS_IS_ACCESSED              = (1 << 0),
