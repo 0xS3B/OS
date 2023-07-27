@@ -2,8 +2,6 @@
 
 #include <types.h>
 
-#define GDT_MAX_DESCRIPTORS     6
-
 typedef struct gdtRegister_s {
     uint16_t size;
     uint64_t addr;
@@ -48,6 +46,11 @@ typedef struct tss_s {
 #define GDT_BASE_MIDDLE(base)   ((base >> 16) & 0xFF)
 #define GDT_BASE_HIGH(base)     ((base >> 24) & 0xFF)
 #define GDT_BASE_UPPER(base)    (base >> 32)
+
+typedef struct gdt_s {
+    gdtEntry_t gdtEntries[5];
+    tssEntry_t tssEntry;
+} __attribute__((packed)) gdt_t;
 
 
 typedef enum {
