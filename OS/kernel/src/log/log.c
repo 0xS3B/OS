@@ -8,7 +8,7 @@ void log(LOG_LEVEL level, const char* module, const char* str, ...) {
     va_list args;
     va_start(args, str);
 
-    vprintf(strBuffer, str, args);
+    vprintf(strBuffer, sizeof(strBuffer), str, args);
 
     va_end(args);
 

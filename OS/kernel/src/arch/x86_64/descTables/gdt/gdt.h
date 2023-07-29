@@ -70,13 +70,13 @@ typedef enum {
 
 typedef enum {
     // long mode
-    GDT_FLAGS_IS_64BITS           = (1 << 1),
+    GDT_FLAG_IS_64BITS           = (1 << 1),
     // protected mode
-    GDT_FLAGS_IS_32BITS           = (1 << 2),
-    GDT_FLAGS_IS_16BITS           = NULL,
+    GDT_FLAG_IS_32BITS           = (1 << 2),
+    GDT_FLAG_IS_16BITS           = NULL,
     
-    GDT_FLAGS_GRANULARITY_1B      = NULL,
-    GDT_FLAGS_GRANULARITY_4KIB    = (1 << 3),
+    GDT_FLAG_GRANULARITY_1B      = NULL,
+    GDT_FLAG_GRANULARITY_4KIB    = (1 << 3),
 } GDT_FLAGS;
 
 

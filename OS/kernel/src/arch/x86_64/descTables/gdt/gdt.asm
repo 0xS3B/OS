@@ -6,7 +6,7 @@ global loadGDT
 global loadTSS
 
 loadGDT:
-    ; get rip (instruction pointer) from call to put in rbx 
+    ; save rip (instruction pointer) from call to put in rbx 
     ; the call instruction pushes rip so we can get the rip with pop
     pop rbx
     
@@ -20,7 +20,7 @@ loadGDT:
     mov ss, ax
     mov es, ax
 
-    ; reload code segment
+    ; reload code segment and get old instruction pointer to return (cs:ip)
     mov rax, SEGDESC_OFFSET * 1
     push rax
     push rbx ; = rip

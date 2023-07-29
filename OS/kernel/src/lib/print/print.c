@@ -1,27 +1,30 @@
 #include <print.h>
 #include <string.h>
 
-uint32_t vprintf(char* buffer, const char* fmt, va_list args) {
+uint32_t vprintf(char* buffer, uint32_t bufferSize, const char* fmt, va_list args) {
     char c;
-	char* str = NULL;
+	char num[20];
+    char* str = NULL;
 
     uint32_t index = 0;
 	while((c = *fmt++) != 0) {
 		if(c == '%') {
-			c = *fmt++;
+			c = *fmt++; // get the type
 
 			switch (c)
             {
                 case 'p':
                 case 'x':
-                    itoa(str, va_arg(args, int), 16);
+                    itoa(num, va_arg(args, int), 16);
+                    str = num;
                     
                     goto string;
                     break;
 
                 case 'd':
                 case 'i':
-                    itoa(str, va_arg(args, int), 10);
+                    itoa(num, va_arg(args, int), 10);
+                    str = num;
 
                     goto string;
                     break;
@@ -42,12 +45,11 @@ uint32_t vprintf(char* buffer, const char* fmt, va_list args) {
 			buffer[index++] = c;
 		}
 
-		if(c == '\0') {
-            buffer[index] = '\0';
+		if(index > bufferSize)
             break;
-        }
 	}
 
+    buffer[index] = '\0';
 
     return index;
 }

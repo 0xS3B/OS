@@ -2,4 +2,5 @@
 
 void initArch() {
     initGDT();
+    initIDT();
 }
