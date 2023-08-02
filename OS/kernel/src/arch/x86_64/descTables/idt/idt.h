@@ -2,8 +2,6 @@
 
 #include <types.h>
 
-#define IDT_MAX_GATES       256
-
 typedef struct idtRegister_s {
     uint16_t size;
     uint64_t addr;
@@ -19,9 +17,13 @@ typedef struct idtEntry_s {
     uint32_t reserved;
 } __attribute__((packed)) idtEntry_t;
 
+#define IDT_OFFSET_LOW(offset)      (offset & 0xFFFF)
+#define IDT_OFFSET_MIDDLE(offset)   ((offset >> 16) & 0xFFFF)
+#define IDT_OFFSET_HIGH(offset)     (offset >> 32)
+
 typedef enum {
     IDT_ATTR_IS_PRESENT             = (1 << 7),
-    IDT_ATTR_IS_INTERRUPT_GATE      = 0b1110,
+    IDT_ATTR_IS_INT_GATE            = 0b1110,
     IDT_ATTR_IS_TRAP_GATE           = 0b1111,
 
     // privilege

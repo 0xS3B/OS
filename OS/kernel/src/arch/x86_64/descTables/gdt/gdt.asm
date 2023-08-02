@@ -12,21 +12,21 @@ loadGDT:
     
     lgdt [rdi]
 
-    ; reload data segment
-    mov ax, SEGDESC_OFFSET * 2 ; data segment descriptor offset
+    ; load data segment
+    mov ax, SEGDESC_OFFSET * 2
     mov ds, ax
     mov fs, ax
     mov gs, ax
-    mov ss, ax
     mov es, ax
+    mov ss, ax
 
-    ; reload code segment and get old instruction pointer to return (cs:ip)
+    ; load code segment and get old instruction pointer to return (cs:ip)
     mov rax, SEGDESC_OFFSET * 1
     push rax
     push rbx ; = rip
     retfq
 
 loadTSS:
-    mov ax, SEGDESC_OFFSET * 5 ; the sixth entry in GDT (TSS segment descriptor)
+    mov ax, SEGDESC_OFFSET * 5 ; the sixth entry in GDT (TSS)
     ltr ax
     ret
