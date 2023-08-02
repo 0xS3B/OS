@@ -3,7 +3,7 @@
 #include <print.h>
 
 void log(LOG_LEVEL level, const char* module, const char* str, ...) {
-    char strBuffer[1024];
+    char strBuffer[4096];
     
     va_list args;
     va_start(args, str);

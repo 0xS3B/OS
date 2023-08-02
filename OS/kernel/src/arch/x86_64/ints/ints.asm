@@ -9,7 +9,10 @@ global interruptVectors
 
 isr_common:
     PUSHA64
-    
+
+    cld
+
+    mov rdi, rsp ; put registers as arg (see register_t in ints/ints.h)
     call interruptHandler
 
     POPA64

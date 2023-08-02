@@ -2,12 +2,12 @@
 
 #include <types.h>
 
-typedef struct gdtRegister_s {
+typedef struct {
     uint16_t size;
     uint64_t addr;
 } __attribute__((packed)) gdtRegister_t;
 
-typedef struct gdtEntry_s {
+typedef struct {
     uint16_t limitLow;
     uint16_t baseLow;
     uint8_t baseMiddle;
@@ -17,7 +17,7 @@ typedef struct gdtEntry_s {
     uint8_t baseHigh;
 } __attribute__((packed)) gdtEntry_t;
 
-typedef struct tssEntry_s {
+typedef struct {
     uint16_t limitLow;
     uint16_t baseLow;
     uint8_t baseMiddle;
@@ -29,7 +29,7 @@ typedef struct tssEntry_s {
     uint32_t reserved;
 } __attribute__((packed)) tssEntry_t;
 
-typedef struct tss_s {
+typedef struct {
     uint32_t reserved0;
     uint64_t rsp[3]; // stack pointer
     uint64_t reserved1;
@@ -47,7 +47,7 @@ typedef struct tss_s {
 #define GDT_BASE_HIGH(base)     ((base >> 24) & 0xFF)
 #define GDT_BASE_UPPER(base)    (base >> 32)
 
-typedef struct gdt_s {
+typedef struct {
     gdtEntry_t gdtEntries[5];
     tssEntry_t tssEntry;
 } __attribute__((packed)) gdt_t;

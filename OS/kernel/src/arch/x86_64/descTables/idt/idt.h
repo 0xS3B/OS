@@ -2,12 +2,12 @@
 
 #include <types.h>
 
-typedef struct idtRegister_s {
+typedef struct {
     uint16_t size;
     uint64_t addr;
 } __attribute__((packed)) idtRegister_t;
 
-typedef struct idtEntry_s {
+typedef struct {
     uint16_t offsetLow;
     uint16_t segmentSelector; // kernel code segment
     uint8_t istIndex;

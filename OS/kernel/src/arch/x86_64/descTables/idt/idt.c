@@ -36,4 +36,5 @@ void initIDT() {
 
     // test
     asm("int $0");
+    asm("int $2");
 }
