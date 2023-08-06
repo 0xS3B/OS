@@ -1,8 +1,8 @@
 #include "idt.h"
 
+#include <system.h>
 #include <arch/x86_64/ints/ints.h>
 
-#include <log/log.h>
 #define MODULE_NAME "IDT"
 
 static __attribute__((aligned(8))) idtEntry_t idtEntries[MAX_INTERRUPTS];
@@ -23,7 +23,7 @@ static idtEntry_t setIDTGate(uint64_t offset, uint8_t istIndex, uint8_t attribut
 
 void initIDT() {
     for(uint16_t i = 0; i < MAX_INTERRUPTS; i++) {
-        idtEntries[i] = setIDTGate(interruptVectors[i], NULL, IDT_ATTR_IS_INT_GATE);
+        idtEntries[i] = setIDTGate(isrs[i], NULL, IDT_ATTR_IS_INT_GATE);
     }
 
     idtRegister_t idtReg = {
@@ -33,8 +33,4 @@ void initIDT() {
     loadIDT(&idtReg);
 
     log(SUCCESS, MODULE_NAME, "Initialized");
-
-    // test
-    asm("int $0");
-    asm("int $2");
 }

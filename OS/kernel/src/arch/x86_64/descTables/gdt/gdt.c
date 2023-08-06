@@ -1,6 +1,7 @@
 #include "gdt.h"
 
-#include <log/log.h>
+#include <system.h>
+
 #define MODULE_NAME "GDT"
 
 static __attribute__((aligned(8))) gdt_t gdt;

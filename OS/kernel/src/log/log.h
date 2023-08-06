@@ -2,8 +2,6 @@
 
 #include <types.h>
 
-#include <drivers/serial/serial.h>
-
 typedef enum {
     SUCCESS     = 0,
     INFO        = 1,
