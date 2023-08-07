@@ -3,6 +3,8 @@
 #include <system.h>
 #include <arch/x86_64/io/io.h>
 
+isr_t interruptHandlers[MAX_INTERRUPTS];
+
 static const char* exceptionMessages[MAX_EXCEPTIONS] = {
     "Division Error", // no error code
     "Debug",
@@ -39,7 +41,7 @@ static const char* exceptionMessages[MAX_EXCEPTIONS] = {
 };
 
 bool isRegistered(uint8_t intNum) {
-    return (isrs[intNum] != NULL);
+    return (interruptHandlers[intNum] != NULL);
 }
 
 void interruptsHandler(registers_t* regs) {
@@ -47,8 +49,8 @@ void interruptsHandler(registers_t* regs) {
         exceptionsHandler(regs);
     } else { // for IRQs
         if(isRegistered(regs->interruptNumber)) {
-            // call handler
-            ((isr_t) isrs[regs->interruptNumber])(regs);
+            // call irq handler
+            interruptHandlers[regs->interruptNumber](regs);
         }
 
         // send an EOI (end of interrupt) to the PIC
@@ -71,5 +73,5 @@ void exceptionsHandler(registers_t* regs) {
 }
 
 void registerInterruptHandler(uint8_t intNum, isr_t handler) {
-    isrs[intNum] = handler;
+    interruptHandlers[intNum] = handler;
 }

@@ -3,7 +3,6 @@
 %include "src/arch/x86_64/cpu/cpu.inc"
 
 %define MAX_INTERRUPTS 256
-%define MAX_EXCEPTIONS 32
 
 extern interruptsHandler
 global isrs
@@ -27,14 +26,9 @@ isr_common:
 %endmacro
 isrs:
     %assign i 0
-    %rep MAX_EXCEPTIONS
+    %rep MAX_INTERRUPTS
         SET_ISR i
     %assign i i+1
-    %endrep
-
-    ; fill the rest on 0 to make them point to nothing (for IRQs, etc... because we use the registerInterruptHandler to register a handler)
-    %rep MAX_INTERRUPTS - MAX_EXCEPTIONS
-        dq 0
     %endrep
 
 
@@ -52,7 +46,7 @@ isrs:
         jmp isr_common
 %endmacro
 
-; exceptions
+; exception interrupts
 ISR_NOERRCODE   0
 ISR_NOERRCODE   1
 ISR_NOERRCODE   2
@@ -85,3 +79,10 @@ ISR_NOERRCODE   28
 ISR_ERRCODE     29
 ISR_ERRCODE     30
 ISR_NOERRCODE   31
+
+; hardware interrupts and the rest
+%assign i 32
+%rep MAX_INTERRUPTS - i
+    ISR_NOERRCODE i
+%assign i i+1
+%endrep

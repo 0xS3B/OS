@@ -3,6 +3,8 @@
 #include <system.h>
 #include <arch/x86_64/ints/ints.h>
 
+#include <arch/x86_64/io/io.h>
+
 #define MODULE_NAME "IDT"
 
 static __attribute__((aligned(8))) idtEntry_t idtEntries[MAX_INTERRUPTS];
@@ -22,6 +24,21 @@ static idtEntry_t setIDTGate(uint64_t offset, uint8_t istIndex, uint8_t attribut
 }
 
 void initIDT() {
+    ioWrite8(0x20, 0x11); /* write ICW1 to PICM, we are gonna write commands to PICM */
+    ioWrite8(0xA0, 0x11); /* write ICW1 to PICS, we are gonna write commands to PICS */
+
+    ioWrite8(0x21, 0x20); /* remap PICM to 0x20 (32 decimal) */
+    ioWrite8(0xA1, 0x28); /* remap PICS to 0x28 (40 decimal) */
+
+    ioWrite8(0x21, 0x04); /* IRQ2 -> connection to slave */ 
+    ioWrite8(0xA1, 0x02);
+
+    ioWrite8(0x21, 0x01); /* write ICW4 to PICM, we are gonna write commands to PICM */
+    ioWrite8(0xA1, 0x01); /* write ICW4 to PICS, we are gonna write commands to PICS */
+
+    ioWrite8(0x21, 0x0); /* enable all IRQs on PICM */
+    ioWrite8(0xA1, 0x0); /* enable all IRQs on PICS */
+    
     for(uint16_t i = 0; i < MAX_INTERRUPTS; i++) {
         idtEntries[i] = setIDTGate(isrs[i], NULL, IDT_ATTR_IS_INT_GATE);
     }
