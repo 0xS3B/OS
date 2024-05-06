@@ -47,7 +47,7 @@ bool isRegistered(uint8_t intNum) {
 void interruptsHandler(registers_t* regs) {
     if(regs->interruptNumber < MAX_EXCEPTIONS) {
         exceptionsHandler(regs);
-    } else { // for IRQs
+    } else if(regs->interruptNumber > MAX_EXCEPTIONS && regs->interruptNumber < MAX_IRQS) { // for IRQs
         if(isRegistered(regs->interruptNumber)) {
             // call irq handler
             interruptHandlers[regs->interruptNumber](regs);
@@ -60,15 +60,15 @@ void interruptsHandler(registers_t* regs) {
 
 void exceptionsHandler(registers_t* regs) {
     if(regs->errorCode == false)
-        log(INFO, "Exception", "%s (%d)", exceptionMessages[regs->interruptNumber], regs->interruptNumber);
+        log(LOG_INFO, "Interrupt exception", "%s (%d)", exceptionMessages[regs->interruptNumber], regs->interruptNumber);
     else {
-        log(ERROR, "Exception", "%s (%d)", exceptionMessages[regs->interruptNumber], regs->interruptNumber);
+        log(LOG_ERROR, "Interrupt exception", "%s (%d)", exceptionMessages[regs->interruptNumber], regs->interruptNumber);
     
-        /* if((regs->cs & 0b11) == KERNEL_RING) { */
+        if((regs->cs & 0b11) == KERNEL_RING) {
             while(true) {
                 asm("hlt");
             }
-        /* } */
+        }
     }
 }
 

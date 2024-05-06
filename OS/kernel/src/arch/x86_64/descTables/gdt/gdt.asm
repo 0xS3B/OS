@@ -21,7 +21,7 @@ loadGDT:
     mov ss, ax
 
     ; load code segment and get old instruction pointer to return (cs:ip)
-    mov rax, SEGDESC_OFFSET * 1
+    mov rax, SEGDESC_OFFSET
     push rax
     push rbx ; = rip
     retfq

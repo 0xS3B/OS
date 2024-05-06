@@ -4,6 +4,7 @@
 
 #define MAX_INTERRUPTS      256
 #define MAX_EXCEPTIONS      32
+#define MAX_IRQS            15
 
 #define IRQ0    32
 #define IRQ1    33

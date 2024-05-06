@@ -82,7 +82,7 @@ ISR_NOERRCODE   31
 
 ; hardware interrupts and the rest
 %assign i 32
-%rep MAX_INTERRUPTS - i
+%rep MAX_INTERRUPTS - 32
     ISR_NOERRCODE i
 %assign i i+1
 %endrep

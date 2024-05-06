@@ -1,8 +1,8 @@
 #include "idt.h"
 
 #include <system.h>
-#include <arch/x86_64/ints/ints.h>
 
+#include <arch/x86_64/ints/ints.h>
 #include <arch/x86_64/io/io.h>
 
 #define MODULE_NAME "IDT"
@@ -13,7 +13,7 @@ static idtEntry_t setIDTGate(uint64_t offset, uint8_t istIndex, uint8_t attribut
     idtEntry_t gate;
 
     gate.offsetLow = IDT_OFFSET_LOW(offset);
-    gate.segmentSelector = 0x8; // code segment
+    gate.segmentSelector = 0x8; // GDT offset code segment
     gate.istIndex = istIndex;
     gate.attributes = IDT_ATTR_IS_PRESENT | IDT_ATTR_RING0 | attributes;
     gate.offsetMiddle = IDT_OFFSET_MIDDLE(offset);
@@ -49,5 +49,7 @@ void initIDT() {
     };
     loadIDT(&idtReg);
 
-    log(SUCCESS, MODULE_NAME, "Initialized");
+    asm("sti");
+
+    log(LOG_SUCCESS, MODULE_NAME, "Initialized");
 }

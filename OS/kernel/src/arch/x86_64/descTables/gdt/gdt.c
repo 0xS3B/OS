@@ -83,5 +83,5 @@ void initGDT() {
     loadGDT(&gdtReg);
     loadTSS();
 
-    log(SUCCESS, MODULE_NAME, "Initialized");
+    log(LOG_SUCCESS, MODULE_NAME, "Initialized");
 }

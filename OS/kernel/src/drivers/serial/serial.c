@@ -24,7 +24,7 @@ void initSerial() {
     serialPrint("\033[2J"); // clear screen
     serialPrint("\033[H"); // move cursor to upper left corner
 
-    log(SUCCESS, MODULE_NAME, "Initialized");
+    log(LOG_SUCCESS, MODULE_NAME, "Initialized");
 }
 
 void serialWrite(char c) {

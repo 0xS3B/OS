@@ -15,19 +15,19 @@ void log(LOG_LEVEL level, const char* module, const char* str, ...) {
 
     switch (level)
     {
-        case SUCCESS:
+        case LOG_SUCCESS:
             serialPrint("\033[1;92m[SUCCESS]\033[1;0m");
             break;
 
-        case INFO:
+        case LOG_INFO:
             serialPrint("\033[1;96m[INFO]\033[1;0m");
             break;
         
-        case WARN:
+        case LOG_WARN:
             serialPrint("\033[1;93m[WARN]\033[1;0m");
             break;
 
-        case ERROR:
+        case LOG_ERROR:
             serialPrint("\033[1;91m[ERROR]\033[1;0m");
             break;
 

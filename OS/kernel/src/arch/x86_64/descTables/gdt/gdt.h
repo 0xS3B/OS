@@ -56,7 +56,7 @@ typedef struct {
 typedef enum {
     GDT_ACCESS_IS_ACCESSED              = (1 << 0),
     GDT_ACCESS_IS_PRESENT               = (1 << 7),
-    GDT_ACCESS_READ_WRITE               = (1 << 1), // code: read only    data: read/write
+    GDT_ACCESS_READ_WRITE               = (1 << 1), // if set -> code seg: read only    data seg: read/write
     GDT_ACCESS_IS_EXECUTABLE            = (1 << 3),
     GDT_ACCESS_CODEDATA_SEGMENT         = (1 << 4),
     
