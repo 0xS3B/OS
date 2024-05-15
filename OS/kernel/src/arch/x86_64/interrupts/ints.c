@@ -1,7 +1,9 @@
 #include "ints.h"
 
 #include <system.h>
-#include <arch/x86_64/io/io.h>
+
+#include <arch/include.h>
+#include ARCH_INCLUDE(misc/io.h)
 
 isr_t interruptHandlers[MAX_INTERRUPTS];
 
@@ -53,8 +55,8 @@ void interruptsHandler(registers_t* regs) {
             interruptHandlers[regs->interruptNumber](regs);
         }
 
-        // send an EOI (end of interrupt) to the PIC
-        ioWrite8(0x20, 0x20);
+        // todo: send an EOI (end of interrupt) to the APIC
+        
     }
 }
 

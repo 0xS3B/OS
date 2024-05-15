@@ -1,6 +1,6 @@
 #include <arch/arch.h>
 
-void initArch() {
-    initGDT();
-    initIDT();
+void arch_init() {
+    gdt_init();
+    idt_init();
 }

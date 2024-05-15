@@ -5,6 +5,8 @@
 
 #define NULL    0
 
+typedef __SIZE_TYPE__ size_t;
+
 typedef enum {
     false,
     true

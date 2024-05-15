@@ -2,10 +2,10 @@
 
 %define SEGDESC_OFFSET      0x8
 
-global loadGDT
-global loadTSS
+global gdt_load
+global tss_load
 
-loadGDT:
+gdt_load:
     ; save rip (instruction pointer) from call to put in rbx 
     ; the call instruction pushes rip so we can get the rip with pop
     pop rbx
@@ -26,7 +26,7 @@ loadGDT:
     push rbx ; = rip
     retfq
 
-loadTSS:
+tss_load:
     mov ax, SEGDESC_OFFSET * 5 ; the sixth entry in GDT (TSS)
     ltr ax
     ret

@@ -5,7 +5,7 @@
 typedef struct {
     uint16_t size;
     uint64_t addr;
-} __attribute__((packed)) gdtRegister_t;
+} __attribute__((packed)) gdt_register_t;
 
 typedef struct {
     uint16_t limitLow;
@@ -15,7 +15,7 @@ typedef struct {
     uint8_t limitHigh:4;
     unsigned flags:4;
     uint8_t baseHigh;
-} __attribute__((packed)) gdtEntry_t;
+} __attribute__((packed)) gdt_entry_t;
 
 typedef struct {
     uint16_t limitLow;
@@ -27,7 +27,7 @@ typedef struct {
     uint8_t baseHigh;
     uint32_t baseUpper;
     uint32_t reserved;
-} __attribute__((packed)) tssEntry_t;
+} __attribute__((packed)) tss_entry_t;
 
 typedef struct {
     uint32_t reserved0;
@@ -48,8 +48,8 @@ typedef struct {
 #define GDT_BASE_UPPER(base)    (base >> 32)
 
 typedef struct {
-    gdtEntry_t gdtEntries[5];
-    tssEntry_t tssEntry;
+    gdt_entry_t gdtEntries[5];
+    tss_entry_t tssEntry;
 } __attribute__((packed)) gdt_t;
 
 
@@ -80,7 +80,7 @@ typedef enum {
 } GDT_FLAGS;
 
 
-extern void loadGDT(gdtRegister_t* gdtReg);
-extern void loadTSS();
+extern void gdt_load(gdt_register_t* gdtReg);
+extern void tss_load();
 
-void initGDT();
+void gdt_init();

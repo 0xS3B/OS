@@ -1,0 +1,7 @@
+typedef: [modulename]_[nameName...]_t
+
+function: [modulename]_[nameName...]
+
+define/enum: [MODULENAME]_[NAME]_[NAME]
+
+var: nameName...

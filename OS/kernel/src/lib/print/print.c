@@ -1,12 +1,12 @@
 #include <print.h>
 #include <string.h>
 
-uint32_t vprintf(char* buffer, uint32_t bufferSize, const char* fmt, va_list args) {
+size_t vprintf(char* buffer, size_t bufferSize, const char* fmt, va_list args) {
     char c;
 	char num[20];
     char* str = NULL;
 
-    uint32_t index = 0;
+    size_t index = 0;
 	while((c = *fmt++) != 0) {
 		if(c == '%') {
 			c = *fmt++; // get the type

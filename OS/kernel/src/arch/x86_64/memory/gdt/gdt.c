@@ -15,8 +15,8 @@ static tss_t tss = {
     .iopbOffset = 0,
 };
 
-static gdtEntry_t createGDTDescriptor(uint32_t base, uint32_t limit, uint8_t access, uint8_t flags) {
-    gdtEntry_t descriptor;
+static gdt_entry_t gdt_createDescriptor(uint32_t base, uint32_t limit, uint8_t access, uint8_t flags) {
+    gdt_entry_t descriptor;
     
     descriptor.limitLow = GDT_LIMIT_LOW(limit);
     descriptor.baseLow = GDT_BASE_LOW(base);
@@ -29,8 +29,8 @@ static gdtEntry_t createGDTDescriptor(uint32_t base, uint32_t limit, uint8_t acc
     return descriptor;
 }
 
-static tssEntry_t createTSSDescriptor(uint64_t base, uint32_t limit) {
-    tssEntry_t tssDescriptor;
+static tss_entry_t tss_createDescriptor(uint64_t base, uint32_t limit) {
+    tss_entry_t tssDescriptor;
     
     tssDescriptor.limitLow = GDT_LIMIT_LOW(limit);
     tssDescriptor.baseLow = GDT_BASE_LOW(base);
@@ -45,43 +45,43 @@ static tssEntry_t createTSSDescriptor(uint64_t base, uint32_t limit) {
     return tssDescriptor;
 }
 
-void initGDT() {
+void gdt_init() {
     // INSTALL GDT
     // kernel null descriptor
-    gdt.gdtEntries[0] = createGDTDescriptor(0, 0, 0, 0);
+    gdt.gdtEntries[0] = gdt_createDescriptor(0, 0, 0, 0);
 
     // kernel code descriptor
-    gdt.gdtEntries[1] = createGDTDescriptor(0, 0xFFFFF, 
+    gdt.gdtEntries[1] = gdt_createDescriptor(0, 0xFFFFF, 
         GDT_ACCESS_IS_PRESENT | GDT_ACCESS_CODEDATA_SEGMENT | GDT_ACCESS_READ_WRITE | GDT_ACCESS_IS_EXECUTABLE | GDT_ACCESS_RING0,
         GDT_FLAG_IS_64BITS | GDT_FLAG_GRANULARITY_4KIB
     );
 
     // kernel data descriptor
-    gdt.gdtEntries[2] = createGDTDescriptor(0, 0xFFFFF, 
+    gdt.gdtEntries[2] = gdt_createDescriptor(0, 0xFFFFF, 
         GDT_ACCESS_IS_PRESENT | GDT_ACCESS_CODEDATA_SEGMENT | GDT_ACCESS_READ_WRITE | GDT_ACCESS_RING0,
         GDT_FLAG_IS_64BITS | GDT_FLAG_GRANULARITY_4KIB
     );
 
     // user code descriptor
-    gdt.gdtEntries[3] = createGDTDescriptor(0, 0xFFFFF, 
+    gdt.gdtEntries[3] = gdt_createDescriptor(0, 0xFFFFF, 
         GDT_ACCESS_IS_PRESENT | GDT_ACCESS_CODEDATA_SEGMENT | GDT_ACCESS_READ_WRITE | GDT_ACCESS_IS_EXECUTABLE | GDT_ACCESS_RING3,
         GDT_FLAG_IS_64BITS | GDT_FLAG_GRANULARITY_4KIB
     );
 
     // user data descriptor
-    gdt.gdtEntries[4] = createGDTDescriptor(0, 0xFFFFF, 
+    gdt.gdtEntries[4] = gdt_createDescriptor(0, 0xFFFFF, 
         GDT_ACCESS_IS_PRESENT | GDT_ACCESS_CODEDATA_SEGMENT | GDT_ACCESS_READ_WRITE | GDT_ACCESS_RING3,
         GDT_FLAG_IS_64BITS | GDT_FLAG_GRANULARITY_4KIB
     );
 
-    gdt.tssEntry = createTSSDescriptor((uint64_t)&tss, sizeof(tss_t));
+    gdt.tssEntry = tss_createDescriptor((uint64_t)&tss, sizeof(tss_t));
     
-    gdtRegister_t gdtReg = { 
+    gdt_register_t gdtReg = { 
         .size = sizeof(gdt_t) - 1,
         .addr = (uint64_t) &gdt,
     };
-    loadGDT(&gdtReg);
-    loadTSS();
+    gdt_load(&gdtReg);
+    tss_load();
 
     log(LOG_SUCCESS, MODULE_NAME, "Initialized");
 }

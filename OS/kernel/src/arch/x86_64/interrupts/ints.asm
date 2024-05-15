@@ -1,6 +1,6 @@
 [bits 64]
 
-%include "src/arch/x86_64/cpu/cpu.inc"
+%include "src/arch/x86_64/misc/cpu/cpu.inc"
 
 %define MAX_INTERRUPTS 256
 

@@ -16,33 +16,33 @@ void log(LOG_LEVEL level, const char* module, const char* str, ...) {
     switch (level)
     {
         case LOG_SUCCESS:
-            serialPrint("\033[1;92m[SUCCESS]\033[1;0m");
+            serial_print("\033[1;92m[SUCCESS]\033[1;0m");
             break;
 
         case LOG_INFO:
-            serialPrint("\033[1;96m[INFO]\033[1;0m");
+            serial_print("\033[1;96m[INFO]\033[1;0m");
             break;
         
         case LOG_WARN:
-            serialPrint("\033[1;93m[WARN]\033[1;0m");
+            serial_print("\033[1;93m[WARN]\033[1;0m");
             break;
 
         case LOG_ERROR:
-            serialPrint("\033[1;91m[ERROR]\033[1;0m");
+            serial_print("\033[1;91m[ERROR]\033[1;0m");
             break;
 
         default:
             break;
     }
-    serialWrite(' ');
+    serial_write(' ');
 
     if(module) {
-        serialPrint("\033[1;3m");
-        serialPrint(module);
-        serialPrint(": ");
-        serialPrint("\033[1;0m");
+        serial_print("\033[1;3m");
+        serial_print(module);
+        serial_print(": ");
+        serial_print("\033[1;0m");
     }
 
-    serialPrint(strBuffer);
-    serialWrite('\n');
+    serial_print(strBuffer);
+    serial_write('\n');
 }

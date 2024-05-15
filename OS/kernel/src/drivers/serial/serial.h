@@ -2,8 +2,6 @@
 
 #include <types.h>
 
-#include <arch/arch.h>
-
 #define COM1_PORT       0x3F8
 
 typedef enum {
@@ -47,7 +45,7 @@ typedef enum {
     MCR_OUT2        = (1 << 3), // OUT2 (enable irq in PC implementations)
 } MCR_BITS;
 
-void initSerial();
+void serial_init();
 
-void serialWrite(char c);
-void serialPrint(const char* c);
+void serial_write(char c);
+void serial_print(const char* c);

@@ -5,7 +5,7 @@
 typedef struct {
     uint16_t size;
     uint64_t addr;
-} __attribute__((packed)) idtRegister_t;
+} __attribute__((packed)) idt_register_t;
 
 typedef struct {
     uint16_t offsetLow;
@@ -15,7 +15,7 @@ typedef struct {
     uint16_t offsetMiddle;
     uint32_t offsetHigh;
     uint32_t reserved;
-} __attribute__((packed)) idtEntry_t;
+} __attribute__((packed)) idt_entry_t;
 
 #define IDT_OFFSET_LOW(offset)      (offset & 0xFFFF)
 #define IDT_OFFSET_MIDDLE(offset)   ((offset >> 16) & 0xFFFF)
@@ -34,6 +34,6 @@ typedef enum {
 } IDT_ATTRS;
 
 
-extern void loadIDT(idtRegister_t* idtReg);
+extern void idt_load(idt_register_t* idtReg);
 
-void initIDT();
+void idt_init();

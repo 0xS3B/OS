@@ -1,7 +1,7 @@
 [bits 64]
 
-global loadIDT
+global idt_load
 
-loadIDT:    
+idt_load:    
     lidt [rdi]
     ret
