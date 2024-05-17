@@ -1,6 +1,6 @@
 #pragma once
 
-#include <types.h>
+#include <lib/types.h>
 
 #define MAX_INTERRUPTS      256
 #define MAX_EXCEPTIONS      32

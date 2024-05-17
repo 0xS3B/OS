@@ -1,6 +1,6 @@
 #pragma once
 
-#include <types.h>
+#include <lib/types.h>
 
 typedef enum {
     LOG_SUCCESS     = 0,

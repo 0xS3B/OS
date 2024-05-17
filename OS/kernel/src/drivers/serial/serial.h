@@ -1,6 +1,6 @@
 #pragma once
 
-#include <types.h>
+#include <lib/types.h>
 
 #define COM1_PORT       0x3F8
 

@@ -1,6 +1,8 @@
 #pragma once
 
-#include <types.h>
+#define ASM_HALT        asm("hlt");
+#define ASM_CLR_INT     asm("cli");
+#define ASM_SET_INT     asm("sti");
 
 // x86 in/out instructions
 

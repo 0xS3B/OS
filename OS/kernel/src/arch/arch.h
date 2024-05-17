@@ -11,7 +11,7 @@
     #include ARCH_INCLUDE(interrupts/ints.h)
     #include ARCH_INCLUDE(interrupts/apic/apic.h)
 
-    #include ARCH_INCLUDE(misc/io.h)
+    #include ARCH_INCLUDE(misc/asm.h)
 
     void arch_init();
 #endif

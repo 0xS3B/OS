@@ -1,6 +1,6 @@
 #pragma once
 
-#include <types.h>
+#include <lib/types.h>
 
 typedef struct {
     uint16_t size;

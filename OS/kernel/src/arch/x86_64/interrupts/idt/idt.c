@@ -4,7 +4,7 @@
 
 #include <arch/include.h>
 #include ARCH_INCLUDE(interrupts/ints.h)
-#include ARCH_INCLUDE(misc/io.h)
+#include ARCH_INCLUDE(misc/asm.h)
 
 #define MODULE_NAME "IDT"
 
@@ -35,7 +35,7 @@ void idt_init() {
     };
     idt_load(&idtReg);
 
-    asm("sti");
+    ASM_SET_INT
 
     log(LOG_SUCCESS, MODULE_NAME, "Initialized");
 }

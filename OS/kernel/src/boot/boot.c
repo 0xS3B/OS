@@ -9,6 +9,8 @@ static volatile struct limine_rsdp_request rsdp_request = {
     .revision = 0
 };
 
+extern bool isXSDP;
+
 /* test */
 /* void keyboard(registers_t* regs) {
     uint8_t scancode = ioRead8(0x60);
@@ -16,20 +18,16 @@ static volatile struct limine_rsdp_request rsdp_request = {
 } */
 
 void kernelStart() {
-    asm("cli");
+    ASM_CLR_INT
 
     serial_init();
 
-    acpi_SDT_t* sdt;
+    acpi_XSDPHeader_t* xsdpDesc = (acpi_XSDPHeader_t*) rsdp_request.response->address;
+    isXSDP = (xsdpDesc->rsdpDesc.revision >= 1);
 
-    acpi_XSDP_t* xsdpDesc = (acpi_XSDP_t*) rsdp_request.response->address; 
-    if(xsdpDesc->rsdpDesc.revision == 2) {
-        sdt = (acpi_SDT_t*) xsdpDesc->xsdtAddr;
-    } else {
-        sdt = (acpi_SDT_t*)(uintptr_t) xsdpDesc->rsdpDesc.rsdtAddr;
-    }
+    log(LOG_INFO, "BOOT [ACPI]", "is XSDP? %d, RSDP Valid? %d", isXSDP, acpi_RSDPChecksumValid(xsdpDesc));
 
-    log(LOG_INFO, "BOOT [ACPI]", "0x%x", sdt);
+    acpi_SDTHeader_t* MADT = acpi_findTable(xsdpDesc, "APIC");
 
     arch_init();
     
@@ -37,5 +35,5 @@ void kernelStart() {
 
     //registerInterruptHandler(IRQ(1), &keyboard);
 
-    while(1) asm("hlt");
+    while(1) ASM_HALT;
 }
